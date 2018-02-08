@@ -5,8 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
 </head>
 <body>
     <input type="text" id="input" data-mask="dd/MM/aaaa" onkeydown="return formatDate(this, event)">
@@ -14,34 +12,42 @@
 
 <script>
     function formatDate(input, event){
-        
+        console.log(event);
         let value = input.value;
-       
+        let maxLength = 10;
         let keyCode = getKeyCode(event);
-
-        if((keyCode == 193 && isBarTime(value.length++)) || keyCode==8) return true;
-
-        if(!isNumber(keyCode) || value.length === 10) return false;
         
-        if(isBarTime(value.length)) value = value + '/';
+        //  backspace, alt, left, rigth...
+        let canDoIt = [0,8,9,37,39, 46];
 
+        // keyCode 193 é o da '/', logo o usuário pode colocar a barra se ele quiser e for o momento correto
+        if((keyCode == 193 && isBarTime(value.length++)) || canDoIt.includes(keyCode)) return true;
+
+        // Caso não seja um número ou o tamanho do campo já tenha o tamanho de máximo de caracteres, não pode adicionar valor no input 
+        if(!isNumber(keyCode) || (value.length === maxLength && !canDoIt.includes(keyCode))) return false;
+        
+        // Se for o momento correto de inserir a barra, adiciona a barra ao valor atual do campo
+        if(isBarTime(value.length)) value = value + '/';
+        
+        // Seta o valor do input novamente
         input.value = value;
     }
 
-
+    // Verifica se o keyCode é de um número
     function isNumber(keyCode){
-        
         if((keyCode>47 && keyCode<58)) return true;
         else{
-            if (keyCode==8 || keyCode==0) return true;
+            if (keyCode == 0 || keyCode == 8) return true;
             else  return false;
         }
     }
 
+    // Recupera o keyCode do evento
     function getKeyCode(event){
         return (window.event) ? event.keyCode : e.which;
     }
 
+    // retorna true se o tamanho do campo for equivalente as posições esperadas das barras
     function isBarTime(length){
         let firstBar = 2;
         let secondBar = 5;
