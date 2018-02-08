@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <input type="text" id="input" data-mask="dd/MM/aaaa" onkeydown="return formatDate(this, event)">
+</body>
+
+<script>
+    function formatDate(input, event){
+        
+        let value = input.value;
+       
+        let keyCode = getKeyCode(event);
+
+        if((keyCode == 193 && isBarTime(value.length++)) || keyCode==8) return true;
+
+        if(!isNumber(keyCode) || value.length === 10) return false;
+        
+        if(isBarTime(value.length)) value = value + '/';
+
+        input.value = value;
+    }
+
+
+    function isNumber(keyCode){
+        
+        if((keyCode>47 && keyCode<58)) return true;
+        else{
+            if (keyCode==8 || keyCode==0) return true;
+            else  return false;
+        }
+    }
+
+    function getKeyCode(event){
+        return (window.event) ? event.keyCode : e.which;
+    }
+
+    function isBarTime(length){
+        let firstBar = 2;
+        let secondBar = 5;
+
+        return (length === firstBar) || (length === secondBar);
+    }
+</script>
+</html>
